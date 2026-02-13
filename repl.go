@@ -5,22 +5,27 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/Heros-Tempus/pokedexcli/internal/pokeapi"
 )
 
-func repl() {
+func repl(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
 		if !scanner.Scan() {
 			break
 		}
-		input := cleanInput(scanner.Text())[0]
-		command, exists := getCommands()[input]
+		input := cleanInput(scanner.Text())
+		if len(input) == 0 {
+			continue
+		}
+		command, exists := getCommands()[input[0]]
 		if !exists {
 			fmt.Println("Unknown command")
 			continue
 		}
-		err := command.callback()
+		err := command.callback(cfg)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -35,7 +40,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -50,6 +55,22 @@ func getCommands() map[string]cliCommand {
 			description: "Exit the Pokedex",
 			callback:    commandExit,
 		},
+		"map": {
+			name:        "map",
+			description: "Display map information",
+			callback:    getLocations,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Display previous map information",
+			callback:    getPreviousLocations,
+		},
 	}
 	return commands
+}
+
+type config struct {
+	client           pokeapi.Client
+	nextLocationsURL *string
+	prevLocationsURL *string
 }
