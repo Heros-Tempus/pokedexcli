@@ -3,14 +3,17 @@ package pokeapi
 import (
 	"net/http"
 	"time"
+
+	"github.com/Heros-Tempus/pokedexcli/internal/pokeapi/pokecache"
 )
 
 type Client struct {
 	httpClient http.Client
+	cache      pokecache.Cache
 }
 
-func NewClient(timeout time.Duration) Client {
-	return Client{httpClient: http.Client{Timeout: timeout}}
+func NewClient(timeout, cacheDuration time.Duration) Client {
+	return Client{httpClient: http.Client{Timeout: timeout}, cache: pokecache.NewCache(cacheDuration)}
 }
 
 type LocationListResp struct {

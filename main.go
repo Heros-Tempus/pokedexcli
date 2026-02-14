@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	pokeapiClient := pokeapi.NewClient(time.Duration(10 * time.Second))
+	pokeapiClient := pokeapi.NewClient(time.Duration(10*time.Second), time.Duration(5*time.Minute))
 	repl(&config{
 		client:           pokeapiClient,
 		nextLocationsURL: nil,
