@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Heros-Tempus/pokedexcli/internal/pokeapi/pokecache"
+	"github.com/Heros-Tempus/pokedexcli/internal/pokecache"
 )
 
 type Client struct {
