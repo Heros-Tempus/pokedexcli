@@ -76,7 +76,7 @@ func catchPokemon(cfg *config, args ...string) error {
 
 	fmt.Printf("Throwing a %sball at %s...\n", displayBall, pokemonName)
 
-	if Catch(captureRate, ballMultiplier) {
+	if Catch(captureRate, ballMultiplier) > rand.Float64() {
 		fmt.Printf("%s was caught!\n", pokemonName)
 		cfg.caughtPokemon[pokemonName] = pokemon
 	} else {
@@ -86,12 +86,12 @@ func catchPokemon(cfg *config, args ...string) error {
 	return nil
 }
 
-func Catch(catchRate int, ballMultiplier float64) bool {
+func Catch(catchRate int, ballMultiplier float64) float64 {
 	x := (float64(catchRate) * ballMultiplier) / 3.0
 	if x >= 255 {
-		return true
+		return 1.0
 	}
 	y := math.Floor(65536.0 / math.Pow(255.0/x, 3.0/16.0))
 	probability := math.Pow(y/65536.0, 4)
-	return probability > rand.Float64()
+	return probability
 }
