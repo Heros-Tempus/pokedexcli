@@ -10,6 +10,15 @@ import (
 func (c *Client) CatchRate(species string) (CatchRate, error) {
 	url := baseURL + "/pokemon-species/" + species
 
+	if val, ok := c.cache.Get(url); ok {
+		rate := CatchRate{}
+		err := json.Unmarshal(val, &rate)
+		if err != nil {
+			return CatchRate{}, err
+		}
+		return rate, nil
+	}
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return CatchRate{}, err
@@ -38,11 +47,21 @@ func (c *Client) CatchRate(species string) (CatchRate, error) {
 		return CatchRate{}, err
 	}
 
+	c.cache.Add(url, dat)
 	return rate, nil
 }
 
 func (c *Client) GetPokemon(species string) (Pokemon, error) {
 	url := baseURL + "/pokemon/" + species
+
+	if val, ok := c.cache.Get(url); ok {
+		pokemon := Pokemon{}
+		err := json.Unmarshal(val, &pokemon)
+		if err != nil {
+			return Pokemon{}, err
+		}
+		return pokemon, nil
+	}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -71,6 +90,6 @@ func (c *Client) GetPokemon(species string) (Pokemon, error) {
 	if err != nil {
 		return Pokemon{}, err
 	}
-
+	c.cache.Add(url, dat)
 	return pokemon, nil
 }
