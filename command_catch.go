@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"math/rand/v2"
+	"strings"
 
 	"github.com/Heros-Tempus/pokedexcli/internal/pokeapi"
 )
@@ -49,8 +50,7 @@ func catchPokemon(cfg *config, args ...string) error {
 	ballMultiplier := 1.0
 	displayBall := "Poke"
 	if len(args) > 1 {
-		ballType := args[1]
-		switch ballType {
+		switch strings.ToLower(args[1]) {
 		case "great", "greatball":
 			ballMultiplier = 1.5
 			displayBall = "Great"
