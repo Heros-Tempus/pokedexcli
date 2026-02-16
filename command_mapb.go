@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func getPreviousLocations(cfg *config) error {
+func getPreviousLocations(cfg *config, args ...string) error {
 	if cfg.prevLocationsURL == nil {
 		return fmt.Errorf("you're on the first page")
 	}

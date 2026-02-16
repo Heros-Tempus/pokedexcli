@@ -25,7 +25,7 @@ func repl(cfg *config) {
 			fmt.Println("Unknown command")
 			continue
 		}
-		err := command.callback(cfg)
+		err := command.callback(cfg, input[1:]...)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -40,7 +40,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -65,6 +65,16 @@ func getCommands() map[string]cliCommand {
 			description: "Display previous map information",
 			callback:    getPreviousLocations,
 		},
+		"explore": {
+			name:        "explore",
+			description: "Explore a location",
+			callback:    exploreLocation,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Attempt to catch a Pokemon",
+			callback:    catchPokemon,
+		},
 	}
 	return commands
 }
@@ -73,4 +83,5 @@ type config struct {
 	client           pokeapi.Client
 	nextLocationsURL *string
 	prevLocationsURL *string
+	caughtPokemon    map[string]pokeapi.Pokemon
 }

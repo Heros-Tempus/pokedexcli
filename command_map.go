@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func getLocations(cfg *config) error {
+func getLocations(cfg *config, args ...string) error {
 	locationsResp, err := cfg.client.ListLocations(cfg.nextLocationsURL)
 	if err != nil {
 		return err
